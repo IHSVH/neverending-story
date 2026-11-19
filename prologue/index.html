@@ -47,10 +47,11 @@
   header h1{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(1.35rem,5.6vw,1.7rem);
     margin:12px 0 0;color:var(--ink);}
   header .orn{display:block;width:120px;height:12px;margin:22px auto 0;}
-  main p{font-family:var(--serif);font-size:1.22rem;line-height:1.74;margin:0;text-indent:1.4em;color:var(--ink-soft);}
+  main{--fs:1.22rem;}
+  main p{font-family:var(--serif);font-size:var(--fs);line-height:1.74;margin:0;text-indent:1.4em;color:var(--ink-soft);}
   main p.first, main p.inscription + p, main p.booktitle + p{text-indent:0;}
   main p.first::after{content:"";display:table;clear:both;}
-  .drop{float:left;font-family:var(--display);color:var(--copper);font-size:4.6rem;line-height:.82;
+  .drop{float:left;font-family:var(--display);color:var(--copper);font-size:3.77em;line-height:.82;
     margin:.12em .1em 0 0;padding-right:.02em;}
   main p.inscription{text-indent:0;text-align:center;font-family:var(--caps);font-size:1.5rem;letter-spacing:.12em;
     color:var(--ink);line-height:1.5;transform:scaleX(-1);}
@@ -101,6 +102,7 @@
     background:var(--copper-deep);cursor:pointer;box-shadow:0 1px 4px rgba(43,38,34,.35);border:2px solid var(--page);}
   #seek::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--copper-deep);cursor:pointer;border:2px solid var(--page);}
   .controlsRow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+  .controlsRow > div{grid-row:1;}
   .transport{grid-column:2;display:flex;align-items:center;justify-content:center;gap:28px;}
   .speedSlot{grid-column:3;display:flex;justify-content:flex-end;}
   .ctrlBtn{background:none;border:none;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:6px;}
@@ -112,13 +114,34 @@
   .skipBtn{position:relative;}
   .skipBtn svg.arc{width:34px;height:34px;fill:none;stroke:var(--ink-soft);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
   .skipLabel{position:absolute;font-size:10px;font-family:var(--sans);font-weight:600;line-height:1;color:var(--copper-deep);top:50%;left:50%;transform:translate(-50%,-50%);}
+  #mini{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:11;
+    display:flex;align-items:center;gap:8px;height:44px;padding:0 18px 0 14px;border:0;border-radius:22px;
+    background:var(--copper-deep);color:#fff;font:600 .85rem var(--sans);font-variant-numeric:tabular-nums;cursor:pointer;
+    box-shadow:0 6px 18px rgba(43,38,34,.28);opacity:0;pointer-events:none;transform:translate(-50%,10px);
+    transition:opacity .25s ease,transform .25s ease;}
+  #mini.show{opacity:1;pointer-events:auto;transform:translate(-50%,0);}
+  #mini svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  .sizeSlot{grid-column:1;display:flex;justify-content:flex-start;position:relative;}
+  #sizeBtn{font-family:var(--display);font-size:1.05rem;color:var(--ink-soft);background:var(--page);border:1px solid var(--rule);
+    border-radius:14px;padding:2px 10px;cursor:pointer;line-height:1.4;}
+  #sizeBtn small{font-size:.72em;}
+  #sizePop{position:absolute;left:-6px;bottom:calc(100% + 18px);display:none;align-items:center;gap:6px;padding:8px 10px;
+    background:var(--page);border:1px solid var(--rule);border-radius:14px;box-shadow:0 8px 24px rgba(43,38,34,.18);}
+  #sizePop.open{display:flex;}
+  #sizePop button{width:40px;height:36px;border:0;border-radius:10px;background:none;color:var(--ink);cursor:pointer;font-family:var(--display);line-height:1;}
+  #sizePop button:active{background:var(--bg);}
+  #sizePop button:disabled{opacity:.3;}
+  #sizeDots{display:flex;gap:6px;padding:0 4px;}
+  #sizeDots i{width:6px;height:6px;border-radius:50%;background:var(--rule);}
+  #sizeDots i.on{background:var(--copper);}
+  #sizeDots i.def{box-shadow:0 0 0 2px var(--page),0 0 0 3px var(--rule);}
   #speed{font-family:var(--sans);font-size:.7rem;color:var(--ink-dim);background:var(--page);border:1px solid var(--rule);border-radius:14px;padding:4px 8px;}
   #resumeBtn{position:fixed;left:50%;bottom:calc(178px + env(safe-area-inset-bottom));z-index:15;
     display:flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:.85rem;color:#fff;
     background:var(--copper-deep);border:none;border-radius:20px;padding:10px 18px;cursor:pointer;box-shadow:0 4px 16px rgba(43,38,34,.28);
     opacity:0;pointer-events:none;transform:translate(-50%,8px);transition:opacity .25s ease,transform .25s ease;}
   #resumeBtn.show{opacity:1;pointer-events:auto;transform:translate(-50%,0);}
-  #resumeBtn.low{bottom:calc(28px + env(safe-area-inset-bottom));}
+  #resumeBtn.low{bottom:calc(84px + env(safe-area-inset-bottom));}
   #resumeBtn svg{width:14px;height:14px;fill:#fff;flex:0 0 auto;}
   #player.loading .controlsRow, #player.loading .seekRow{opacity:.45;pointer-events:none;}
   #gate{position:fixed;inset:0;z-index:30;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px;}
@@ -176,6 +199,14 @@
         <svg viewBox="0 0 24 24" class="arc"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M9 1l3 3-3 3"/></svg><span class="skipLabel">15</span>
       </button>
     </div>
+    <div class="sizeSlot">
+      <button id="sizeBtn" type="button" aria-label="Text size"><small>A</small>A</button>
+      <div id="sizePop">
+        <button id="sizeDown" type="button" aria-label="Smaller text" style="font-size:.95rem">A</button>
+        <div id="sizeDots"></div>
+        <button id="sizeUp" type="button" aria-label="Larger text" style="font-size:1.45rem">A</button>
+      </div>
+    </div>
     <div class="speedSlot">
       <select id="speed">
         <option value="0.75">0.75&times;</option><option value="1" selected>1&times;</option>
@@ -185,6 +216,9 @@
   </div>
 </div></div>
 
+<button id="mini" type="button" aria-label="Show playback controls">
+  <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg><span id="miniTime">0:00</span>
+</button>
 <audio id="audio" preload="metadata"></audio>
 <div id="gate"><form id="gateForm" autocomplete="on">
   <div class="gt">The Neverending Story</div>
@@ -288,13 +322,15 @@ resumeBtn.addEventListener('click', () => { autoFollowSuspended = false; hideRes
 
 // ---- player visibility: tap the page to show/hide; tapping a word reads from it ----
 let collapseTimer = null;
-function setCollapsed(on){ player.classList.toggle('collapsed', on); progressStrip.classList.toggle('show', on); resumeBtn.classList.toggle('low', on); }
+const mini = $('mini'), miniTime = $('miniTime');
+function setCollapsed(on){ player.classList.toggle('collapsed', on); progressStrip.classList.toggle('show', on); resumeBtn.classList.toggle('low', on); mini.classList.toggle('show', on); if(on) $('sizePop').classList.remove('open'); }
+mini.addEventListener('click', () => expandPlayer());
 function scheduleCollapse(){ clearTimeout(collapseTimer); collapseTimer = setTimeout(() => { if(!audio.paused) setCollapsed(true); }, 3500); }
 function expandPlayer(){ setCollapsed(false); scheduleCollapse(); }
 player.addEventListener('touchstart', () => scheduleCollapse(), {passive:true});
 player.addEventListener('mousemove', () => scheduleCollapse());
 document.addEventListener('click', e => {
-  if(e.target.closest('#player, #tocOverlay, #resumeBtn, header, .bar, a, button, select')) return;
+  if(e.target.closest('#player, #tocOverlay, #resumeBtn, #mini, header, .bar, a, button, select')) return;
   if(e.target.classList.contains('word')) return;
   if(player.classList.contains('collapsed')) expandPlayer(); else { clearTimeout(collapseTimer); setCollapsed(true); }
 });
@@ -307,6 +343,7 @@ let seekDragging = false;
 audio.addEventListener('timeupdate', () => {
   updateHighlight();
   if(!seekDragging){ seek.value = Math.floor(audio.currentTime*10); curTime.textContent = fmt(audio.currentTime); }
+  miniTime.textContent = fmt(audio.currentTime);
   if(audio.duration) progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
 });
 
@@ -374,6 +411,24 @@ seek.addEventListener('change', () => { audio.currentTime = seek.value/10; seekD
 try { const r = parseFloat(localStorage.getItem('nes-speed')); if(r) { speedEl.value = String(r); audio.playbackRate = r; } } catch(e){}
 audio.addEventListener('loadedmetadata', () => { audio.playbackRate = parseFloat(speedEl.value); });
 speedEl.addEventListener('change', () => { audio.playbackRate = parseFloat(speedEl.value); try { localStorage.setItem('nes-speed', speedEl.value); } catch(e){} });
+const SIZES = [1.0, 1.1, 1.22, 1.36, 1.52], SIZE_DEFAULT = 2;
+let sizeIdx = SIZE_DEFAULT;
+try { const v = parseInt(localStorage.getItem('nes-size'), 10); if(v >= 0 && v < SIZES.length) sizeIdx = v; } catch(e){}
+const sizeDots = $('sizeDots');
+SIZES.forEach((_, i) => { const d = document.createElement('i'); if(i === SIZE_DEFAULT) d.className = 'def'; sizeDots.appendChild(d); });
+function applySize(keepPlace){
+  textEl.style.setProperty('--fs', SIZES[sizeIdx] + 'rem');
+  [...sizeDots.children].forEach((d, i) => d.classList.toggle('on', i === sizeIdx));
+  $('sizeDown').disabled = sizeIdx === 0; $('sizeUp').disabled = sizeIdx === SIZES.length - 1;
+  try { localStorage.setItem('nes-size', String(sizeIdx)); } catch(e){}
+  if(keepPlace && lastIdx >= 0) scrollWordIntoView(flatWords[lastIdx].el, 'auto');
+}
+applySize(false);
+$('sizeBtn').addEventListener('click', e => { e.stopPropagation(); $('sizePop').classList.toggle('open'); scheduleCollapse(); });
+$('sizeDown').addEventListener('click', e => { e.stopPropagation(); if(sizeIdx > 0){ sizeIdx--; applySize(true); } scheduleCollapse(); });
+$('sizeUp').addEventListener('click', e => { e.stopPropagation(); if(sizeIdx < SIZES.length - 1){ sizeIdx++; applySize(true); } scheduleCollapse(); });
+document.addEventListener('click', e => { if(!e.target.closest('.sizeSlot')) $('sizePop').classList.remove('open'); });
+
 textEl.addEventListener('click', e => {
   if(e.target.classList.contains('word')){
     audio.currentTime = parseFloat(e.target.dataset.start); syncSpokenState(false); userNavigated();
