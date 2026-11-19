@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Neverending Story — Chapter XIV</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Neverending">
+<meta name="theme-color" content="#A4643C">
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../icon.png">
+<link rel="apple-touch-icon" href="../icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF7EF; --page:#FFFDF8; --ink:#2B2622; --ink-soft:#463E37; --ink-dim:#8A7E72;
+    --rule:#EAE1D3; --copper:#A4643C; --copper-deep:#8E532F; --copper-pale:#E9D6C6;
+    --seg-hl:rgba(164,100,60,.07); --word-hl:rgba(164,100,60,.22); --spoken:#B5A595;
+    --serif:"Literata",Georgia,serif; --display:"IM Fell English",Georgia,serif;
+    --caps:"IM Fell English SC","IM Fell English",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink-soft);font-family:var(--serif);
+    min-height:100vh;-webkit-text-size-adjust:100%;overscroll-behavior-y:none;}
+  .bar{position:sticky;top:0;z-index:6;background:var(--copper);color:#fff;font-family:var(--sans);
+    display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;
+    padding:calc(env(safe-area-inset-top) + 6px) 8px 6px;box-shadow:0 1px 0 rgba(0,0,0,.08);}
+  .bar a,.bar button{color:#fff;background:none;border:none;padding:0;margin:0;cursor:pointer;font:inherit;text-decoration:none;}
+  .barBtn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:22px;}
+  .barBtn:active{background:rgba(255,255,255,.18);}
+  .barBtn svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+  .barCenter{min-width:0;width:100%;text-align:center;line-height:1.2;padding:4px 2px;border-radius:8px;}
+  .barTop{display:block;font-weight:600;font-size:.98rem;letter-spacing:.03em;}
+  .barSub{display:block;font-weight:400;font-size:.78rem;opacity:.92;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .barSub:empty{display:none;}
+
+  .wrap{max-width:680px;margin:0 auto;padding:8px 24px 180px;}
+  header{padding:44px 0 30px;text-align:center;}
+  header .num{font-family:var(--display);font-size:2.6rem;line-height:1;color:var(--copper);letter-spacing:.04em;}
+  header .num:empty{display:none;}
+  header h1{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(1.35rem,5.6vw,1.7rem);
+    margin:12px 0 0;color:var(--ink);}
+  header .orn{display:block;width:120px;height:12px;margin:22px auto 0;}
+  main{--fs:1.22rem;}
+  main p{font-family:var(--serif);font-size:var(--fs);line-height:1.74;margin:0;text-indent:1.4em;color:var(--ink-soft);}
+  main p.first, main p.inscription + p, main p.booktitle + p{text-indent:0;}
+  main p.first::after{content:"";display:table;clear:both;}
+  .drop.sep{margin-right:.32em;}
+  .drop{float:left;font-family:var(--display);color:var(--copper);font-size:3.77em;line-height:.82;
+    margin:.12em .1em 0 0;padding-right:.02em;}
+  main p.inscription{text-indent:0;text-align:center;font-family:var(--caps);font-size:1.5rem;letter-spacing:.12em;
+    color:var(--ink);line-height:1.5;transform:scaleX(-1);}
+  main p.inscription:first-child{padding-top:6px;}
+  main p.inscription + p.inscription{margin-bottom:30px;padding-bottom:22px;border-bottom:1px solid var(--rule);}
+  main p.booktitle{text-indent:0;text-align:center;font-family:var(--display);font-size:1.9rem;color:var(--copper);
+    margin:28px 0 8px;line-height:1.3;}
+  .seg{border-radius:3px;transition:background-color .2s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
+  .seg.active{background:var(--seg-hl);box-shadow:0 0 0 3px var(--seg-hl);}
+  .word{transition:background-color .12s ease,color .12s ease;border-radius:3px;padding:0 1px;cursor:pointer;}
+  .word.spoken{color:var(--spoken);}
+  .word.current{background:var(--word-hl);color:var(--ink);box-shadow:0 0 0 2px var(--word-hl);}
+  .next{display:block;margin:56px auto 0;max-width:420px;text-align:center;text-decoration:none;
+    border-top:1px solid var(--rule);padding-top:26px;color:var(--ink-dim);font-family:var(--sans);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;}
+  .next b{display:block;margin-top:6px;font-family:var(--display);font-weight:400;font-size:1.35rem;letter-spacing:0;text-transform:none;color:var(--copper);}
+  .next.locked{pointer-events:none;opacity:.55;}
+
+  #tocOverlay{position:fixed;inset:0;background:rgba(43,38,34,.42);display:none;z-index:20;}
+  #tocOverlay.open{display:block;}
+  #tocSheet{position:absolute;left:0;right:0;bottom:0;max-height:76vh;background:var(--page);
+    border-radius:18px 18px 0 0;padding:0 0 calc(14px + env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;box-shadow:0 -8px 30px rgba(43,38,34,.25);overflow:hidden;}
+  .sheetHeader{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;
+    background:var(--copper);color:#fff;font-family:var(--sans);font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+  .sheetHeader button{background:none;border:none;font-size:22px;line-height:1;color:#fff;cursor:pointer;}
+  #tocList{list-style:none;margin:0;padding:4px 4px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  #tocList a{display:flex;align-items:baseline;gap:14px;padding:13px 18px;text-decoration:none;
+    color:var(--ink-soft);border-bottom:1px solid var(--rule);font-family:var(--serif);font-size:1rem;line-height:1.35;}
+  #tocList a .r{font-family:var(--display);color:var(--copper);min-width:44px;flex:0 0 auto;}
+  #tocList a.active{color:var(--ink);box-shadow:inset 3px 0 0 var(--copper);}
+  #tocList a.locked{opacity:.45;pointer-events:none;}
+
+  #player{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:10;
+    max-width:600px;margin:0 auto;background:var(--page);border:1px solid var(--rule);border-radius:18px;
+    padding:12px 18px 14px;box-shadow:0 10px 30px rgba(43,38,34,.16);transition:transform .32s ease,opacity .32s ease;}
+  #player.collapsed{transform:translateY(calc(100% + 24px + env(safe-area-inset-bottom)));opacity:0;box-shadow:none;}
+  #fade{position:fixed;left:0;right:0;bottom:0;z-index:8;pointer-events:none;height:calc(64px + env(safe-area-inset-bottom));
+    background:linear-gradient(to bottom, rgba(251,247,239,0), var(--bg) 72%);}
+  #progressStrip{position:absolute;left:0;right:0;bottom:0;height:3px;pointer-events:none;
+    background:rgba(255,255,255,.22);opacity:0;transition:opacity .3s ease;}
+  #progressStrip.show{opacity:1;}
+  #progressFill{height:100%;width:0;background:#fff;transition:width .25s linear;}
+  .seekRow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  #curTime,#durTime{font-family:var(--sans);font-size:.75rem;color:var(--ink-dim);min-width:38px;flex:0 0 auto;font-variant-numeric:tabular-nums;}
+  #durTime{text-align:right;}
+  #seek{flex:1 1 auto;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:var(--rule);outline:none;}
+  #seek::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--copper-deep);cursor:pointer;box-shadow:0 1px 4px rgba(43,38,34,.35);border:2px solid var(--page);}
+  #seek::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--copper-deep);cursor:pointer;border:2px solid var(--page);}
+  .controlsRow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+  .controlsRow > div{grid-row:1;}
+  .transport{grid-column:2;display:flex;align-items:center;justify-content:center;gap:28px;}
+  .speedSlot{grid-column:3;display:flex;justify-content:flex-end;}
+  .ctrlBtn{background:none;border:none;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:6px;}
+  .ctrlBtn svg{width:26px;height:26px;fill:var(--ink-soft);}
+  #playBtn{width:64px;height:64px;border-radius:50%;background:var(--copper-deep);box-shadow:0 3px 10px rgba(142,83,47,.4);}
+  #playBtn svg{width:26px;height:26px;fill:#fff;margin-left:2px;}
+  #playBtn.playing svg{margin-left:0;}
+  #playBtn:active{transform:scale(.96);}
+  .skipBtn{position:relative;}
+  .skipBtn svg.arc{width:34px;height:34px;fill:none;stroke:var(--ink-soft);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .skipLabel{position:absolute;font-size:10px;font-family:var(--sans);font-weight:600;line-height:1;color:var(--copper-deep);top:50%;left:50%;transform:translate(-50%,-50%);}
+  #mini{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:11;
+    display:flex;align-items:center;gap:8px;height:44px;padding:0 18px 0 14px;border:0;border-radius:22px;
+    background:var(--copper-deep);color:#fff;font:600 .85rem var(--sans);font-variant-numeric:tabular-nums;cursor:pointer;
+    box-shadow:0 6px 18px rgba(43,38,34,.28);opacity:0;pointer-events:none;transform:translate(-50%,10px);
+    transition:opacity .25s ease,transform .25s ease;}
+  #mini.show{opacity:1;pointer-events:auto;transform:translate(-50%,0);}
+  #mini svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  .sizeSlot{grid-column:1;display:flex;justify-content:flex-start;position:relative;}
+  #sizeBtn{font-family:var(--sans);font-weight:600;font-size:.95rem;color:var(--ink-soft);background:var(--page);border:1px solid var(--rule);
+    border-radius:14px;padding:2px 10px;cursor:pointer;line-height:1.4;}
+  #sizeBtn small{font-size:.72em;}
+  #sizePop{position:absolute;left:-6px;bottom:calc(100% + 18px);display:none;align-items:center;gap:6px;padding:8px 10px;
+    background:var(--page);border:1px solid var(--rule);border-radius:14px;box-shadow:0 8px 24px rgba(43,38,34,.18);}
+  #sizePop.open{display:flex;}
+  #sizePop button{width:40px;height:36px;border:0;border-radius:10px;background:none;color:var(--ink);cursor:pointer;font-family:var(--sans);font-weight:500;line-height:1;}
+  #sizePop button:active{background:var(--bg);}
+  #sizePop button:disabled{opacity:.3;}
+  #sizeDots{display:flex;gap:6px;padding:0 4px;}
+  #sizeDots i{width:6px;height:6px;border-radius:50%;background:var(--rule);}
+  #sizeDots i.on{background:var(--copper);}
+  #sizeDots i.def{box-shadow:0 0 0 2px var(--page),0 0 0 3px var(--rule);}
+  #speed{font-family:var(--sans);font-size:.7rem;color:var(--ink-dim);background:var(--page);border:1px solid var(--rule);border-radius:14px;padding:4px 8px;}
+  #resumeBtn{position:fixed;left:50%;bottom:calc(178px + env(safe-area-inset-bottom));z-index:15;
+    display:flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:.85rem;color:#fff;
+    background:var(--copper-deep);border:none;border-radius:20px;padding:10px 18px;cursor:pointer;box-shadow:0 4px 16px rgba(43,38,34,.28);
+    opacity:0;pointer-events:none;transform:translate(-50%,8px);transition:opacity .25s ease,transform .25s ease;}
+  #resumeBtn.show{opacity:1;pointer-events:auto;transform:translate(-50%,0);}
+  #resumeBtn.low{bottom:calc(84px + env(safe-area-inset-bottom));}
+  #resumeBtn svg{width:14px;height:14px;fill:#fff;flex:0 0 auto;}
+  #player.loading .controlsRow, #player.loading .seekRow{opacity:.45;pointer-events:none;}
+  #gate{position:fixed;inset:0;z-index:30;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px;}
+  #gate.open{display:flex;}
+  #gateForm{width:100%;max-width:340px;text-align:center;}
+  #gateForm .gt{font-family:var(--display);font-size:1.9rem;color:var(--ink);margin-bottom:28px;}
+  #gateForm label{display:block;font-family:var(--sans);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--copper);font-weight:600;margin-bottom:8px;}
+  #gateForm input{width:100%;font:1.1rem var(--serif);padding:12px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--page);color:var(--ink);outline:none;}
+  #gateForm input:focus{border-color:var(--copper);}
+  #gateForm button{margin-top:14px;width:100%;padding:13px;border:0;border-radius:10px;background:var(--copper-deep);color:#fff;font:600 1rem var(--sans);}
+  #gateMsg{min-height:1.4em;margin-top:12px;font-family:var(--sans);font-size:.85rem;color:var(--ink-dim);}
+</style>
+</head>
+<body>
+<div id="tocOverlay"><div id="tocSheet">
+  <div class="sheetHeader"><span>Contents</span><button id="closeToc" aria-label="Close">&times;</button></div>
+  <ul id="tocList"></ul>
+</div></div>
+
+<div class="bar">
+  <a class="barBtn" href="../index.html" aria-label="All chapters"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>
+  <button class="barCenter" id="barCenter" type="button" aria-label="Contents"><span class="barTop">Chapter XIV</span><span class="barSub">The Desert of Colors</span></button>
+  <button id="tocBtn" class="barBtn" type="button" aria-label="Contents"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+  <div id="progressStrip"><div id="progressFill"></div></div>
+</div>
+<div class="wrap">
+  <header>
+    <div class="num">XIV</div>
+    <h1>The Desert of Colors</h1>
+    <svg class="orn" viewBox="0 0 120 12" fill="none" stroke="#A4643C" stroke-width="1"><path d="M4 6h44M72 6h44"/><path d="M60 1.5l4.5 4.5L60 10.5 55.5 6z"/></svg>
+  </header>
+  <main id="text"></main>
+  <a class="next" href="../chapter-15/index.html">Next &middot; Chapter XV<b>Grograman, the Many-Colored Death</b></a>
+</div>
+
+<button id="resumeBtn" type="button">
+  <svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 011 1v2.06A7.002 7.002 0 0118.94 11H21a1 1 0 010 2h-2.06A7.002 7.002 0 0113 18.94V21a1 1 0 01-2 0v-2.06A7.002 7.002 0 015.06 13H3a1 1 0 010-2h2.06A7.002 7.002 0 0111 5.06V3a1 1 0 011-1zm0 5a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 110 4 2 2 0 010-4z"/></svg>
+  <span>Return to reading</span>
+</button>
+
+<div id="fade"></div>
+<div id="player"><div class="inner">
+  <div class="seekRow">
+    <span id="curTime">0:00</span>
+    <input id="seek" type="range" min="0" max="1000" value="0">
+    <span id="durTime">0:00</span>
+  </div>
+  <div class="controlsRow">
+    <div class="transport">
+      <button class="ctrlBtn skipBtn" id="back15" aria-label="Back 15 seconds">
+        <svg viewBox="0 0 24 24" class="arc"><path d="M12 4a8 8 0 1 1-8 8"/><path d="M15 1l-3 3 3 3"/></svg><span class="skipLabel">15</span>
+      </button>
+      <button id="playBtn" class="ctrlBtn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="ctrlBtn skipBtn" id="fwd15" aria-label="Forward 15 seconds">
+        <svg viewBox="0 0 24 24" class="arc"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M9 1l3 3-3 3"/></svg><span class="skipLabel">15</span>
+      </button>
+    </div>
+    <div class="sizeSlot">
+      <button id="sizeBtn" type="button" aria-label="Text size"><small>A</small>A</button>
+      <div id="sizePop">
+        <button id="sizeDown" type="button" aria-label="Smaller text" style="font-size:.95rem">A</button>
+        <div id="sizeDots"></div>
+        <button id="sizeUp" type="button" aria-label="Larger text" style="font-size:1.45rem">A</button>
+      </div>
+    </div>
+    <div class="speedSlot">
+      <select id="speed">
+        <option value="0.75">0.75&times;</option><option value="1" selected>1&times;</option>
+        <option value="1.15">1.15&times;</option><option value="1.25">1.25&times;</option><option value="1.5">1.5&times;</option>
+      </select>
+    </div>
+  </div>
+</div></div>
+
+<button id="mini" type="button" aria-label="Show playback controls">
+  <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg><span id="miniTime">0:00</span>
+</button>
+<audio id="audio" preload="metadata"></audio>
+<div id="gate"><form id="gateForm" autocomplete="on">
+  <div class="gt">The Neverending Story</div>
+  <label for="pw">Passphrase</label>
+  <input id="pw" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false">
+  <button type="submit">Open</button>
+  <div id="gateMsg"></div>
+</form></div>
+<script id="tocData" type="application/json">[{"slug":"prologue","roman":"","title":"Prologue","has":true},{"slug":"chapter-1","roman":"I","title":"Fantastica in Danger","has":true},{"slug":"chapter-2","roman":"II","title":"Atreyu's Mission","has":true},{"slug":"chapter-3","roman":"III","title":"Morla the Aged One","has":true},{"slug":"chapter-4","roman":"IV","title":"Ygramul the Many","has":true},{"slug":"chapter-5","roman":"V","title":"The Gnomics","has":true},{"slug":"chapter-6","roman":"VI","title":"The Three Magic Gates","has":true},{"slug":"chapter-7","roman":"VII","title":"The Voice of Silence","has":true},{"slug":"chapter-8","roman":"VIII","title":"The Wind Giants","has":true},{"slug":"chapter-9","roman":"IX","title":"Spook City","has":true},{"slug":"chapter-10","roman":"X","title":"The Flight to the Ivory Tower","has":true},{"slug":"chapter-11","roman":"XI","title":"The Childlike Empress","has":true},{"slug":"chapter-12","roman":"XII","title":"The Old Man of Wandering Mountain","has":true},{"slug":"chapter-13","roman":"XIII","title":"Perilin, the Night Forest","has":true},{"slug":"chapter-14","roman":"XIV","title":"The Desert of Colors","has":true},{"slug":"chapter-15","roman":"XV","title":"Grograman, the Many-Colored Death","has":true},{"slug":"chapter-16","roman":"XVI","title":"The Silver City of Amarganth","has":true},{"slug":"chapter-17","roman":"XVII","title":"A Dragon for Hero Hynreck","has":true},{"slug":"chapter-18","roman":"XVIII","title":"The Acharis","has":true},{"slug":"chapter-19","roman":"XIX","title":"The Traveling Companions","has":true},{"slug":"chapter-20","roman":"XX","title":"The Seeing Hand","has":true},{"slug":"chapter-21","roman":"XXI","title":"The Star Cloister","has":true},{"slug":"chapter-22","roman":"XXII","title":"The Battle for the Ivory Tower","has":true},{"slug":"chapter-23","roman":"XXIII","title":"The City of the Old Emperors","has":true},{"slug":"chapter-24","roman":"XXIV","title":"Dame Eyola","has":true},{"slug":"chapter-25","roman":"XXV","title":"The Picture Mine","has":true},{"slug":"chapter-26","roman":"XXVI","title":"The Water of Life","has":true}]</script>
+<script>
+if(navigator.standalone){
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]');
+    if(!a || a.target === '_blank') return;
+    const u = new URL(a.getAttribute('href'), location.href);
+    if(u.origin !== location.origin) return;
+    e.preventDefault(); location.href = u.href;
+  }, true);
+}
+const SLUG = 'chapter-14';
+const TOC = JSON.parse(document.getElementById('tocData').textContent);
+const $ = id => document.getElementById(id);
+const audio = $('audio'), textEl = $('text'), seek = $('seek'), playBtn = $('playBtn');
+const curTime = $('curTime'), durTime = $('durTime'), speedEl = $('speed'), player = $('player');
+const resumeBtn = $('resumeBtn'), progressStrip = $('progressStrip'), progressFill = $('progressFill');
+const tocOverlay = $('tocOverlay'), tocList = $('tocList');
+
+// ---- render text: paragraphs > sentences > words ----
+const flatWords = [];
+function render(PARAS){
+let firstBody = true;
+PARAS.forEach(p => {
+  const pe = document.createElement('p');
+  if(p.cls) pe.className = p.cls;
+  else if(firstBody){ pe.className = 'first'; firstBody = false; }
+  if(p.drop){ const d = document.createElement('span'); d.className = p.dropw ? 'drop sep' : 'drop'; d.textContent = p.drop; d.setAttribute('aria-hidden','true'); pe.appendChild(d); }
+  p.segs.forEach(seg => {
+    const se = document.createElement('span'); se.className = 'seg';
+    seg.forEach(w => {
+      const sp = document.createElement('span');
+      sp.className = 'word'; sp.textContent = w[0]; sp.dataset.start = w[1];
+      se.appendChild(sp); se.appendChild(document.createTextNode(' '));
+      flatWords.push({ start: w[1], el: sp, seg: se });
+    });
+    pe.appendChild(se);
+  });
+  textEl.appendChild(pe);
+});
+}
+
+// ---- contents sheet ----
+TOC.forEach(c => {
+  const li = document.createElement('li'), a = document.createElement('a');
+  a.href = '../' + c.slug + '/index.html';
+  if(c.slug === SLUG) a.classList.add('active');
+  if(!c.has) a.classList.add('locked');
+  a.innerHTML = '<span class="r">' + (c.roman || '') + '</span><span>' + c.title + '</span>';
+  li.appendChild(a); tocList.appendChild(li);
+});
+function openToc(){ tocOverlay.classList.add('open'); const a = tocList.querySelector('a.active'); if(a) a.scrollIntoView({block:'center'}); }
+$('tocBtn').addEventListener('click', openToc);
+$('barCenter').addEventListener('click', openToc);
+$('closeToc').addEventListener('click', () => tocOverlay.classList.remove('open'));
+tocOverlay.addEventListener('click', e => { if(e.target === tocOverlay) tocOverlay.classList.remove('open'); });
+
+// ---- highlighting ----
+let activeSeg = null;
+function setActiveSeg(s){ if(s === activeSeg) return; if(activeSeg) activeSeg.classList.remove('active'); activeSeg = s || null; if(activeSeg) activeSeg.classList.add('active'); }
+function fmt(sec){ if(!isFinite(sec)) return '0:00'; const m = Math.floor(sec/60), s = Math.floor(sec%60); return m + ':' + String(s).padStart(2,'0'); }
+let lastIdx = -1;
+function binarySearchWord(t){ let lo=0, hi=flatWords.length-1, ans=-1;
+  while(lo<=hi){ const mid=(lo+hi)>>1; if(flatWords[mid].start<=t){ ans=mid; lo=mid+1; } else hi=mid-1; } return ans; }
+let programmaticScroll = false, programmaticScrollTimer = null;
+function scrollWordIntoView(el, behavior){
+  programmaticScroll = true; el.scrollIntoView({block:'center', behavior: behavior || 'smooth'});
+  clearTimeout(programmaticScrollTimer); programmaticScrollTimer = setTimeout(() => { programmaticScroll = false; }, 700);
+}
+function updateHighlight(){
+  const idx = binarySearchWord(audio.currentTime);
+  if(idx < 0) return;
+  if(idx < lastIdx - 2){ syncSpokenState(false); return; }
+  if(idx <= lastIdx){ if(!flatWords[lastIdx].el.classList.contains('current')) syncSpokenState(false); return; }
+  for(let i = Math.max(lastIdx, 0); i < idx; i++){ flatWords[i].el.classList.remove('current'); flatWords[i].el.classList.add('spoken'); }
+  flatWords[idx].el.classList.remove('spoken'); flatWords[idx].el.classList.add('current');
+  setActiveSeg(flatWords[idx].seg);
+  if(!autoFollowSuspended) scrollWordIntoView(flatWords[idx].el);
+  lastIdx = idx;
+}
+function syncSpokenState(scrollBehavior){
+  const idx = binarySearchWord(audio.currentTime);
+  flatWords.forEach((w,i) => { w.el.classList.remove('current','spoken'); if(i<idx) w.el.classList.add('spoken'); if(i===idx) w.el.classList.add('current'); });
+  setActiveSeg(idx>=0 ? flatWords[idx].seg : null);
+  lastIdx = idx; autoFollowSuspended = false; hideResumeBtn();
+  if(scrollBehavior && idx>=0) scrollWordIntoView(flatWords[idx].el, scrollBehavior === true ? 'smooth' : scrollBehavior);
+}
+let autoFollowSuspended = false, resumeHideTimer = null;
+function showResumeBtn(){ resumeBtn.classList.add('show'); clearTimeout(resumeHideTimer); resumeHideTimer = setTimeout(() => resumeBtn.classList.remove('show'), 4000); }
+function hideResumeBtn(){ resumeBtn.classList.remove('show'); clearTimeout(resumeHideTimer); }
+window.addEventListener('scroll', () => { if(programmaticScroll || lastIdx < 0) return; autoFollowSuspended = true; showResumeBtn(); }, {passive:true});
+resumeBtn.addEventListener('click', () => { autoFollowSuspended = false; hideResumeBtn(); if(lastIdx >= 0) scrollWordIntoView(flatWords[lastIdx].el); });
+
+// ---- player visibility: tap the page to show/hide; tapping a word reads from it ----
+let collapseTimer = null;
+const mini = $('mini'), miniTime = $('miniTime');
+function setCollapsed(on){ player.classList.toggle('collapsed', on); progressStrip.classList.toggle('show', on); resumeBtn.classList.toggle('low', on); mini.classList.toggle('show', on); if(on) $('sizePop').classList.remove('open'); }
+mini.addEventListener('click', () => expandPlayer());
+function scheduleCollapse(){ clearTimeout(collapseTimer); collapseTimer = setTimeout(() => { if(!audio.paused) setCollapsed(true); }, 3500); }
+function expandPlayer(){ setCollapsed(false); scheduleCollapse(); }
+player.addEventListener('touchstart', () => scheduleCollapse(), {passive:true});
+player.addEventListener('mousemove', () => scheduleCollapse());
+document.addEventListener('click', e => {
+  if(e.target.closest('#player, #tocOverlay, #resumeBtn, #mini, header, .bar, a, button, select')) return;
+  if(e.target.classList.contains('word')) return;
+  if(player.classList.contains('collapsed')) expandPlayer(); else { clearTimeout(collapseTimer); setCollapsed(true); }
+});
+document.addEventListener('keydown', e => {
+  if(e.code !== 'Space' || e.target.closest('select, input, button')) return;
+  e.preventDefault(); if(audio.paused) audio.play(); else audio.pause();
+});
+
+let seekDragging = false;
+audio.addEventListener('timeupdate', () => {
+  updateHighlight();
+  if(!seekDragging){ seek.value = Math.floor(audio.currentTime*10); curTime.textContent = fmt(audio.currentTime); }
+  miniTime.textContent = fmt(audio.currentTime);
+  if(audio.duration) progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+});
+
+// ---- listening progress (restore only once the browser honours the seek; never clobber real progress) ----
+const PROGRESS_KEY = 'nes-progress-' + SLUG, DURATION_KEY = 'nes-duration-' + SLUG, DONE_KEY = 'nes-done-' + SLUG;
+try { localStorage.setItem('nes-last', SLUG); } catch(e){}
+try { if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
+let resumeTarget = null, progressArmed = false, resumeTries = 0;
+try { const saved = parseFloat(localStorage.getItem(PROGRESS_KEY)); if(!isNaN(saved) && saved > 3) resumeTarget = saved; } catch(e){}
+if(resumeTarget === null) progressArmed = true; else curTime.textContent = fmt(resumeTarget);
+function saveProgress(force){
+  if(!progressArmed && !force) return;
+  const t = audio.currentTime; if(!isFinite(t)) return;
+  try { const prev = parseFloat(localStorage.getItem(PROGRESS_KEY));
+    if(!force && t < 5 && prev >= 10) return;
+    localStorage.setItem(PROGRESS_KEY, String(t)); } catch(e){}
+}
+function settleResume(){ resumeTarget = null; progressArmed = true; }
+function applyResume(){
+  if(resumeTarget === null) return;
+  if(audio.duration && resumeTarget >= audio.duration - 2){ settleResume(); return; }
+  if(Math.abs(audio.currentTime - resumeTarget) < 1.5){ settleResume(); return; }
+  if(resumeTries++ > 6){ settleResume(); return; }
+  try { audio.currentTime = resumeTarget; } catch(e){}
+  seek.value = Math.floor(resumeTarget*10); curTime.textContent = fmt(resumeTarget);
+  syncSpokenState('auto');
+}
+function userNavigated(){ settleResume(); saveProgress(true); }
+audio.addEventListener('loadedmetadata', () => {
+  seek.max = Math.floor(audio.duration*10); durTime.textContent = fmt(audio.duration);
+  try { localStorage.setItem(DURATION_KEY, String(audio.duration)); } catch(e){}
+  applyResume();
+});
+audio.addEventListener('canplay', applyResume);
+if(audio.readyState >= 1){ seek.max = Math.floor(audio.duration*10); durTime.textContent = fmt(audio.duration); applyResume(); }
+audio.addEventListener('play', applyResume);
+audio.addEventListener('seeked', () => {
+  if(resumeTarget !== null && Math.abs(audio.currentTime - resumeTarget) < 1.5) settleResume();
+  syncSpokenState(false); saveProgress();
+});
+let lastSaveAt = 0;
+audio.addEventListener('timeupdate', () => {
+  if(resumeTarget !== null){
+    if(Math.abs(audio.currentTime - resumeTarget) < 1.5) settleResume();
+    else if(audio.currentTime < 2 && !audio.paused) applyResume();
+  }
+  const now = Date.now(); if(now - lastSaveAt > 3000){ lastSaveAt = now; saveProgress(); }
+});
+audio.addEventListener('ended', () => { try { localStorage.setItem(DONE_KEY, '1'); } catch(e){} saveProgress(true); });
+audio.addEventListener('pause', () => saveProgress());
+document.addEventListener('visibilitychange', () => { if(document.hidden) saveProgress(); });
+window.addEventListener('pagehide', () => saveProgress());
+window.addEventListener('beforeunload', () => saveProgress());
+audio.addEventListener('play', () => { playBtn.classList.add('playing');
+  playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>'; scheduleCollapse(); });
+audio.addEventListener('pause', () => { playBtn.classList.remove('playing');
+  playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'; clearTimeout(collapseTimer); setCollapsed(false); });
+playBtn.addEventListener('click', () => { if(audio.paused) audio.play(); else audio.pause(); });
+$('back15').addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime-15); syncSpokenState(true); userNavigated(); });
+$('fwd15').addEventListener('click', () => { audio.currentTime = Math.min(audio.duration, audio.currentTime+15); syncSpokenState(true); userNavigated(); });
+seek.addEventListener('mousedown', () => seekDragging = true);
+seek.addEventListener('touchstart', () => seekDragging = true);
+seek.addEventListener('input', () => { curTime.textContent = fmt(seek.value/10); });
+seek.addEventListener('change', () => { audio.currentTime = seek.value/10; seekDragging = false; syncSpokenState(true); userNavigated(); });
+try { const r = parseFloat(localStorage.getItem('nes-speed')); if(r) { speedEl.value = String(r); audio.playbackRate = r; } } catch(e){}
+audio.addEventListener('loadedmetadata', () => { audio.playbackRate = parseFloat(speedEl.value); });
+speedEl.addEventListener('change', () => { audio.playbackRate = parseFloat(speedEl.value); try { localStorage.setItem('nes-speed', speedEl.value); } catch(e){} });
+const SIZES = [1.0, 1.1, 1.22, 1.36, 1.52], SIZE_DEFAULT = 2;
+let sizeIdx = SIZE_DEFAULT;
+try { const v = parseInt(localStorage.getItem('nes-size'), 10); if(v >= 0 && v < SIZES.length) sizeIdx = v; } catch(e){}
+const sizeDots = $('sizeDots');
+SIZES.forEach((_, i) => { const d = document.createElement('i'); if(i === SIZE_DEFAULT) d.className = 'def'; sizeDots.appendChild(d); });
+function applySize(keepPlace){
+  textEl.style.setProperty('--fs', SIZES[sizeIdx] + 'rem');
+  [...sizeDots.children].forEach((d, i) => d.classList.toggle('on', i === sizeIdx));
+  $('sizeDown').disabled = sizeIdx === 0; $('sizeUp').disabled = sizeIdx === SIZES.length - 1;
+  try { localStorage.setItem('nes-size', String(sizeIdx)); } catch(e){}
+  if(keepPlace && lastIdx >= 0) scrollWordIntoView(flatWords[lastIdx].el, 'auto');
+}
+applySize(false);
+$('sizeBtn').addEventListener('click', e => { e.stopPropagation(); $('sizePop').classList.toggle('open'); scheduleCollapse(); });
+$('sizeDown').addEventListener('click', e => { e.stopPropagation(); if(sizeIdx > 0){ sizeIdx--; applySize(true); } scheduleCollapse(); });
+$('sizeUp').addEventListener('click', e => { e.stopPropagation(); if(sizeIdx < SIZES.length - 1){ sizeIdx++; applySize(true); } scheduleCollapse(); });
+document.addEventListener('click', e => { if(!e.target.closest('.sizeSlot')) $('sizePop').classList.remove('open'); });
+
+textEl.addEventListener('click', e => {
+  if(e.target.classList.contains('word')){
+    audio.currentTime = parseFloat(e.target.dataset.start); syncSpokenState(false); userNavigated();
+    if(audio.paused) audio.play();
+  }
+});
+
+// ---- private copy: text and audio are AES-GCM ciphertext; the key is derived
+// from the passphrase once per device and kept in this device's storage ----
+const KEY_STORE = 'nes-key';
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function importKey(raw){ return crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']); }
+async function decryptBuf(key, buf){
+  const u = new Uint8Array(buf);
+  return crypto.subtle.decrypt({name:'AES-GCM', iv:u.slice(0,12)}, key, u.slice(12));
+}
+async function keyFromPass(pass){
+  const meta = await (await fetch('../key.json', {cache:'no-cache'})).json();
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass.trim().toLowerCase()), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:b64(meta.salt), iterations:meta.iter}, base, 256);
+  const key = await importKey(bits);
+  await decryptBuf(key, b64(meta.check));          // throws if the passphrase is wrong
+  return {key, raw: btoa(String.fromCharCode(...new Uint8Array(bits)))};
+}
+async function boot(key){
+  const textBuf = await (await fetch('text.bin')).arrayBuffer();
+  render(JSON.parse(new TextDecoder().decode(await decryptBuf(key, textBuf))));
+  if(resumeTarget !== null) syncSpokenState('auto');
+  player.classList.add('loading');
+  const audioBuf = await (await fetch('audio.bin')).arrayBuffer();
+  const plain = await decryptBuf(key, audioBuf);
+  audio.src = URL.createObjectURL(new Blob([plain], {type:'audio/mpeg'}));
+  player.classList.remove('loading');
+}
+(async () => {
+  const gate = $('gate');
+  let stored = null;
+  try { stored = localStorage.getItem(KEY_STORE); } catch(e){}
+  if(stored){
+    try { await boot(await importKey(b64(stored))); return; }
+    catch(e){ try { localStorage.removeItem(KEY_STORE); } catch(_){} }
+  }
+  gate.classList.add('open');
+  $('gateForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('gateMsg').textContent = 'Opening…';
+    try {
+      const k = await keyFromPass($('pw').value);
+      try { localStorage.setItem(KEY_STORE, k.raw); } catch(_){}
+      gate.classList.remove('open');
+      await boot(k.key);
+    } catch(err){ $('gateMsg').textContent = 'That passphrase doesn’t open this book.'; }
+  });
+})();
+</script>
+</body>
+</html>
