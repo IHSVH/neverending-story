@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Neverending Story</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Neverending">
+<meta name="theme-color" content="#A4643C">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF7EF; --page:#FFFDF8; --ink:#2B2622; --ink-soft:#463E37; --ink-dim:#8A7E72;
+    --rule:#EAE1D3; --copper:#A4643C; --copper-deep:#8E532F; --copper-pale:#E9D6C6;
+    --seg-hl:rgba(164,100,60,.07); --word-hl:rgba(164,100,60,.22); --spoken:#B5A595;
+    --serif:"Literata",Georgia,serif; --display:"IM Fell English",Georgia,serif;
+    --caps:"IM Fell English SC","IM Fell English",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink-soft);font-family:var(--serif);
+    min-height:100vh;-webkit-text-size-adjust:100%;overscroll-behavior-y:none;}
+  .bar{position:sticky;top:0;z-index:6;background:var(--copper);color:#fff;font-family:var(--sans);
+    display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;
+    padding:calc(env(safe-area-inset-top) + 6px) 8px 6px;box-shadow:0 1px 0 rgba(0,0,0,.08);}
+  .bar a,.bar button{color:#fff;background:none;border:none;padding:0;margin:0;cursor:pointer;font:inherit;text-decoration:none;}
+  .barBtn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:22px;}
+  .barBtn:active{background:rgba(255,255,255,.18);}
+  .barBtn svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+  .barCenter{min-width:0;width:100%;text-align:center;line-height:1.2;padding:4px 2px;border-radius:8px;}
+  .barTop{display:block;font-weight:600;font-size:.98rem;letter-spacing:.03em;}
+  .barSub{display:block;font-weight:400;font-size:.78rem;opacity:.92;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .barSub:empty{display:none;}
+
+  .bar{grid-template-columns:1fr;text-align:center;padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;font-weight:500;letter-spacing:.04em;}
+  .wrap{max-width:560px;margin:0 auto;padding:8px 24px 60px;}
+  header{text-align:center;padding:40px 0 26px;}
+  header h1{font-family:var(--display);font-weight:400;font-size:clamp(1.9rem,8vw,2.5rem);line-height:1.15;margin:0;color:var(--ink);}
+  header .by{font-family:var(--display);font-style:italic;font-size:1.1rem;color:var(--ink-dim);margin:10px 0 0;}
+  header .orn{display:block;width:120px;height:12px;margin:22px auto 0;}
+  #cont{display:none;margin:0 0 22px;padding:16px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--page);
+    text-decoration:none;color:var(--ink-soft);font-family:var(--sans);}
+  #cont small{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--copper);font-weight:600;}
+  #cont b{display:block;font-family:var(--display);font-weight:400;font-size:1.3rem;color:var(--ink);margin-top:4px;}
+  ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule);}
+  li a{position:relative;display:flex;align-items:baseline;gap:14px;padding:16px 4px;border-bottom:1px solid var(--rule);
+    text-decoration:none;color:var(--ink-soft);}
+  li a:active{background:var(--page);}
+  .r{font-family:var(--display);color:var(--copper);min-width:44px;flex:0 0 auto;font-size:1.05rem;}
+  .t{font-family:var(--serif);font-size:1.05rem;margin-right:auto;}
+  .meta{font-family:var(--sans);font-size:.75rem;color:var(--ink-dim);white-space:nowrap;}
+  .meta.done{color:var(--copper);}
+  li a.locked{pointer-events:none;}
+  li a.locked .r, li a.locked .t{opacity:.45;}
+  .prog{position:absolute;left:4px;right:4px;bottom:-1px;height:2px;pointer-events:none;}
+  .prog i{display:block;height:100%;width:0;background:var(--copper);}
+</style>
+</head>
+<body>
+<div class="bar">Michael Ende</div>
+<div class="wrap">
+  <header>
+    <h1>The Neverending Story</h1>
+    <svg class="orn" viewBox="0 0 120 12" fill="none" stroke="#A4643C" stroke-width="1"><path d="M4 6h44M72 6h44"/><path d="M60 1.5l4.5 4.5L60 10.5 55.5 6z"/></svg>
+  </header>
+  <a id="cont" href="#"><small>Continue</small><b></b></a>
+  <ul>
+    <li><a href="prologue/index.html" data-slug="prologue" data-dur="1563" data-label="Prologue" data-title="Prologue"><span class="r"></span><span class="t">Prologue</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-1/index.html" data-slug="chapter-1" data-dur="0" data-label="Chapter I" data-title="Fantastica in Danger"><span class="r">I</span><span class="t">Fantastica in Danger</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-2/index.html" data-slug="chapter-2" data-dur="0" data-label="Chapter II" data-title="Atreyu's Mission"><span class="r">II</span><span class="t">Atreyu's Mission</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-3/index.html" data-slug="chapter-3" data-dur="0" data-label="Chapter III" data-title="Morla the Aged One"><span class="r">III</span><span class="t">Morla the Aged One</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-4/index.html" data-slug="chapter-4" data-dur="0" data-label="Chapter IV" data-title="Ygramul the Many"><span class="r">IV</span><span class="t">Ygramul the Many</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-5/index.html" data-slug="chapter-5" data-dur="0" data-label="Chapter V" data-title="The Gnomics"><span class="r">V</span><span class="t">The Gnomics</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-6/index.html" data-slug="chapter-6" data-dur="0" data-label="Chapter VI" data-title="The Three Magic Gates"><span class="r">VI</span><span class="t">The Three Magic Gates</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-7/index.html" data-slug="chapter-7" data-dur="0" data-label="Chapter VII" data-title="The Voice of Silence"><span class="r">VII</span><span class="t">The Voice of Silence</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-8/index.html" data-slug="chapter-8" data-dur="0" data-label="Chapter VIII" data-title="The Wind Giants"><span class="r">VIII</span><span class="t">The Wind Giants</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-9/index.html" data-slug="chapter-9" data-dur="0" data-label="Chapter IX" data-title="Spook City"><span class="r">IX</span><span class="t">Spook City</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-10/index.html" data-slug="chapter-10" data-dur="0" data-label="Chapter X" data-title="The Flight to the Ivory Tower"><span class="r">X</span><span class="t">The Flight to the Ivory Tower</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-11/index.html" data-slug="chapter-11" data-dur="0" data-label="Chapter XI" data-title="The Childlike Empress"><span class="r">XI</span><span class="t">The Childlike Empress</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-12/index.html" data-slug="chapter-12" data-dur="0" data-label="Chapter XII" data-title="The Old Man of Wandering Mountain"><span class="r">XII</span><span class="t">The Old Man of Wandering Mountain</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-13/index.html" data-slug="chapter-13" data-dur="0" data-label="Chapter XIII" data-title="Perilin, the Night Forest"><span class="r">XIII</span><span class="t">Perilin, the Night Forest</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-14/index.html" data-slug="chapter-14" data-dur="0" data-label="Chapter XIV" data-title="The Desert of Colors"><span class="r">XIV</span><span class="t">The Desert of Colors</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-15/index.html" data-slug="chapter-15" data-dur="0" data-label="Chapter XV" data-title="Grograman, the Many-Colored Death"><span class="r">XV</span><span class="t">Grograman, the Many-Colored Death</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-16/index.html" data-slug="chapter-16" data-dur="0" data-label="Chapter XVI" data-title="The Silver City of Amarganth"><span class="r">XVI</span><span class="t">The Silver City of Amarganth</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-17/index.html" data-slug="chapter-17" data-dur="0" data-label="Chapter XVII" data-title="A Dragon for Hero Hynreck"><span class="r">XVII</span><span class="t">A Dragon for Hero Hynreck</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-18/index.html" data-slug="chapter-18" data-dur="0" data-label="Chapter XVIII" data-title="The Acharis"><span class="r">XVIII</span><span class="t">The Acharis</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-19/index.html" data-slug="chapter-19" data-dur="0" data-label="Chapter XIX" data-title="The Traveling Companions"><span class="r">XIX</span><span class="t">The Traveling Companions</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-20/index.html" data-slug="chapter-20" data-dur="0" data-label="Chapter XX" data-title="The Seeing Hand"><span class="r">XX</span><span class="t">The Seeing Hand</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-21/index.html" data-slug="chapter-21" data-dur="0" data-label="Chapter XXI" data-title="The Star Cloister"><span class="r">XXI</span><span class="t">The Star Cloister</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-22/index.html" data-slug="chapter-22" data-dur="0" data-label="Chapter XXII" data-title="The Battle for the Ivory Tower"><span class="r">XXII</span><span class="t">The Battle for the Ivory Tower</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-23/index.html" data-slug="chapter-23" data-dur="0" data-label="Chapter XXIII" data-title="The City of the Old Emperors"><span class="r">XXIII</span><span class="t">The City of the Old Emperors</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-24/index.html" data-slug="chapter-24" data-dur="0" data-label="Chapter XXIV" data-title="Dame Eyola"><span class="r">XXIV</span><span class="t">Dame Eyola</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-25/index.html" data-slug="chapter-25" data-dur="0" data-label="Chapter XXV" data-title="The Picture Mine"><span class="r">XXV</span><span class="t">The Picture Mine</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+    <li><a class="locked" href="chapter-26/index.html" data-slug="chapter-26" data-dur="0" data-label="Chapter XXVI" data-title="The Water of Life"><span class="r">XXVI</span><span class="t">The Water of Life</span><span class="meta"></span><span class="prog"><i></i></span></a></li>
+  </ul>
+</div>
+<script>
+if(navigator.standalone){
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]'); if(!a) return;
+    const u = new URL(a.getAttribute('href'), location.href); if(u.origin !== location.origin) return;
+    e.preventDefault(); location.href = u.href;
+  }, true);
+}
+document.querySelectorAll('li a[data-slug]').forEach(a => {
+  if(a.classList.contains('locked')) return;
+  const s = a.dataset.slug, meta = a.querySelector('.meta'), fill = a.querySelector('.prog i');
+  let pos = 0, dur = parseFloat(a.dataset.dur) || 0, fin = false;
+  try { pos = parseFloat(localStorage.getItem('nes-progress-' + s)) || 0;
+    dur = parseFloat(localStorage.getItem('nes-duration-' + s)) || dur;
+    fin = localStorage.getItem('nes-done-' + s) === '1'; } catch(e){}
+  const pct = dur ? Math.min(100, pos / dur * 100) : 0;
+  if(fin || pct >= 97){ meta.className = 'meta done'; meta.textContent = 'Finished'; fill.style.width = '100%'; }
+  else if(pct >= 1){ meta.textContent = Math.round(pct) + '%'; fill.style.width = pct + '%'; }
+});
+try {
+  const last = localStorage.getItem('nes-last');
+  const a = last && document.querySelector('li a[data-slug="' + last + '"]:not(.locked)');
+  if(a && localStorage.getItem('nes-done-' + last) !== '1'){
+    const c = document.getElementById('cont'); c.href = a.getAttribute('href');
+    c.querySelector('b').textContent = a.dataset.label + (a.dataset.label !== a.dataset.title ? ' \u00b7 ' + a.dataset.title : '');
+    c.style.display = 'block';
+  }
+} catch(e){}
+</script>
+</body>
+</html>
