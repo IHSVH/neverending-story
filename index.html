@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Neverending">
 <meta name="theme-color" content="#A4643C">
+<script>(function(){try{var t=localStorage.getItem("nes-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
@@ -22,12 +23,16 @@
     --serif:"Literata",Georgia,serif; --display:"IM Fell English",Georgia,serif;
     --caps:"IM Fell English SC","IM Fell English",Georgia,serif;
     --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    --bar:#A4643C; --fade0:rgba(251,247,239,0); color-scheme:light;
   }
+  :root[data-theme="dark"]{--bg:#1A1714; --page:#24201C; --ink:#EFE7DC; --ink-soft:#D6CCBF; --ink-dim:#998C7E; --rule:#3A332C; --copper:#D08A5C; --copper-deep:#B4683A; --copper-pale:#4A3426; --bar:#5A3520; --seg-hl:rgba(208,138,92,.12); --word-hl:rgba(208,138,92,.30); --spoken:#76695C; --fade0:rgba(26,23,20,0); color-scheme:dark;}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){--bg:#1A1714; --page:#24201C; --ink:#EFE7DC; --ink-soft:#D6CCBF; --ink-dim:#998C7E; --rule:#3A332C; --copper:#D08A5C; --copper-deep:#B4683A; --copper-pale:#4A3426; --bar:#5A3520; --seg-hl:rgba(208,138,92,.12); --word-hl:rgba(208,138,92,.30); --spoken:#76695C; --fade0:rgba(26,23,20,0); color-scheme:dark;} }
+  .orn{stroke:var(--copper);}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{background:var(--bg);color:var(--ink-soft);font-family:var(--serif);
     min-height:100vh;-webkit-text-size-adjust:100%;overscroll-behavior-y:none;}
-  .bar{position:sticky;top:0;z-index:6;background:var(--copper);color:#fff;font-family:var(--sans);
+  .bar{position:sticky;top:0;z-index:6;background:var(--bar);color:#fff;font-family:var(--sans);
     display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;
     padding:calc(env(safe-area-inset-top) + 6px) 8px 6px;box-shadow:0 1px 0 rgba(0,0,0,.08);}
   .bar a,.bar button{color:#fff;background:none;border:none;padding:0;margin:0;cursor:pointer;font:inherit;text-decoration:none;}
