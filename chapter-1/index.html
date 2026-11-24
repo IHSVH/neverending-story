@@ -161,7 +161,28 @@
   #resumeBtn.show{opacity:1;pointer-events:auto;transform:translate(-50%,0);}
   #resumeBtn.low{bottom:calc(84px + env(safe-area-inset-bottom));}
   #resumeBtn svg{width:14px;height:14px;fill:#fff;flex:0 0 auto;}
-  #player.loading .controlsRow, #player.loading .seekRow{opacity:.45;pointer-events:none;}
+  #player.loading .controlsRow{pointer-events:none;}
+  #player.loading .skipBtn, #player.loading .sizeSlot, #player.loading .speedSlot{opacity:.45;}
+  #player.loading #playBtn svg{opacity:0;}
+  @keyframes nesSpin{to{transform:rotate(360deg);}}
+  @keyframes nesSlide{from{transform:translateX(-100%);}to{transform:translateX(340%);}}
+  .spin{display:none;border-radius:50%;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;animation:nesSpin .9s linear infinite;}
+  #playBtn{position:relative;}
+  #playBtn .spin{position:absolute;top:50%;left:50%;width:26px;height:26px;margin:-13px 0 0 -13px;}
+  #player.loading #playBtn .spin{display:block;}
+  #loadRow{display:none;align-items:center;gap:10px;margin-bottom:14px;height:18px;font-family:var(--sans);font-size:.75rem;color:var(--ink-dim);}
+  #player.loading #loadRow, #player.loadfail #loadRow{display:flex;}
+  #player.loading .seekRow, #player.loadfail .seekRow{display:none;}
+  #loadLabel{flex:0 0 auto;min-width:96px;}
+  #loadBar{flex:1 1 auto;height:6px;border-radius:3px;background:var(--rule);overflow:hidden;position:relative;}
+  #loadFill{display:block;height:100%;width:0;background:var(--copper);border-radius:3px;transition:width .2s linear;}
+  #loadBar.indet #loadFill{width:30%;transition:none;animation:nesSlide 1.2s ease-in-out infinite;}
+  #loadPct{flex:0 0 auto;min-width:38px;text-align:right;font-variant-numeric:tabular-nums;}
+  #player.loadfail #loadRow{color:var(--copper-deep);cursor:pointer;pointer-events:auto;}
+  #player.loadfail #loadBar, #player.loadfail #loadPct{display:none;}
+  #mini .spin{width:16px;height:16px;border-width:2px;}
+  #mini.loading .spin{display:block;}
+  #mini.loading svg{display:none;}
   #gate{position:fixed;inset:0;z-index:30;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px;}
   #gate.open{display:flex;}
   #gateForm{width:100%;max-width:340px;text-align:center;}
@@ -202,6 +223,7 @@
 
 <div id="fade"></div>
 <div id="player"><div class="inner">
+  <div id="loadRow"><span id="loadLabel">Loading audio…</span><div id="loadBar" class="indet"><i id="loadFill"></i></div><span id="loadPct"></span></div>
   <div class="seekRow">
     <span id="curTime">0:00</span>
     <input id="seek" type="range" min="0" max="1000" value="0">
@@ -212,7 +234,7 @@
       <button class="ctrlBtn skipBtn" id="back15" aria-label="Back 15 seconds">
         <svg viewBox="0 0 24 24" class="arc"><path d="M12 4a8 8 0 1 1-8 8"/><path d="M15 1l-3 3 3 3"/></svg><span class="skipLabel">15</span>
       </button>
-      <button id="playBtn" class="ctrlBtn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button id="playBtn" class="ctrlBtn" aria-label="Play"><i class="spin"></i><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
       <button class="ctrlBtn skipBtn" id="fwd15" aria-label="Forward 15 seconds">
         <svg viewBox="0 0 24 24" class="arc"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M9 1l3 3-3 3"/></svg><span class="skipLabel">15</span>
       </button>
@@ -243,7 +265,7 @@
 </div></div>
 
 <button id="mini" type="button" aria-label="Show playback controls">
-  <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg><span id="miniTime">0:00</span>
+  <i class="spin"></i><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg><span id="miniTime">0:00</span>
 </button>
 <audio id="audio" preload="metadata"></audio>
 <div id="gate"><form id="gateForm" autocomplete="on">
@@ -512,11 +534,53 @@ async function boot(key){
   const textBuf = await (await fetch('text.bin')).arrayBuffer();
   render(JSON.parse(new TextDecoder().decode(await decryptBuf(key, textBuf))));
   if(resumeTarget !== null) syncSpokenState('auto');
-  player.classList.add('loading');
-  const audioBuf = await (await fetch('audio.bin')).arrayBuffer();
-  const plain = await decryptBuf(key, audioBuf);
-  audio.src = URL.createObjectURL(new Blob([plain], {type:'audio/mpeg'}));
-  player.classList.remove('loading');
+  await loadAudio(key);
+}
+let audioLoaded = false;
+function setLoad(label, frac){
+  $('loadLabel').textContent = label;
+  const bar = $('loadBar');
+  bar.classList.toggle('indet', frac == null);
+  $('loadFill').style.width = frac == null ? '' : (frac * 100).toFixed(1) + '%';
+  $('loadPct').textContent = frac == null ? '' : Math.floor(frac * 100) + '%';
+  if(!audioLoaded) miniTime.textContent = frac == null ? 'Loading…' : Math.floor(frac * 100) + '%';
+}
+async function loadAudio(key){
+  player.classList.remove('loadfail'); player.classList.add('loading'); mini.classList.add('loading');
+  setLoad('Loading audio…', null);
+  try {
+    const res = await fetch('audio.bin');
+    if(!res.ok) throw new Error(res.status);
+    const total = +res.headers.get('content-length') || 0;
+    let buf;
+    if(res.body && total){
+      const rd = res.body.getReader(), parts = [];
+      let got = 0;
+      for(;;){
+        const {done, value} = await rd.read();
+        if(done) break;
+        parts.push(value); got += value.length;
+        setLoad('Loading audio…', Math.min(got / total, 1));
+      }
+      const out = new Uint8Array(got);
+      let o = 0; for(const v of parts){ out.set(v, o); o += v.length; }
+      buf = out.buffer;
+    } else {
+      buf = await res.arrayBuffer();
+    }
+    setLoad('Preparing…', 1);
+    const plain = await decryptBuf(key, buf);
+    audio.src = URL.createObjectURL(new Blob([plain], {type:'audio/mpeg'}));
+    audioLoaded = true;
+    player.classList.remove('loading'); mini.classList.remove('loading');
+    miniTime.textContent = fmt(audio.currentTime);
+  } catch(err){
+    player.classList.remove('loading'); player.classList.add('loadfail'); mini.classList.remove('loading');
+    $('loadLabel').textContent = 'Audio didn’t load — tap to retry';
+    miniTime.textContent = 'Retry';
+    const retry = e => { e.stopPropagation(); $('loadRow').removeEventListener('click', retry); loadAudio(key); };
+    $('loadRow').addEventListener('click', retry);
+  }
 }
 (async () => {
   const gate = $('gate');
